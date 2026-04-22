@@ -59,6 +59,9 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 
+const categoryRoutes = require('./routes/categoryRoutes');
+app.use('/api/categories', categoryRoutes);
+
 // ─── Conexión a MongoDB Atlas ──────────────────────────────────────────────
 mongoose
   .connect(process.env.MONGODB_URI)
