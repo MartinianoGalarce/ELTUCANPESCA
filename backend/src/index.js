@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
+const mongoSanitize = require('mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 
 // ─── Configuración de variables de entorno ─────────────────────────────────
@@ -26,8 +26,13 @@ app.use(cors({
 // NOTE: parsear JSON en el body de los requests
 app.use(express.json());
 
-// NOTE: previene inyección NoSQL limpiando $ y . de los inputs
-app.use(mongoSanitize());
+// NOTE: sanitiza el body, query y params para prevenir inyección NoSQL
+app.use((req, res, next) => {
+  req.body = mongoSanitize(req.body);
+  req.query = mongoSanitize(req.query);
+  req.params = mongoSanitize(req.params);
+  next();
+});
 
 // NOTE: límite general — 100 requests por IP cada 15 minutos
 const generalLimiter = rateLimit({
@@ -46,9 +51,13 @@ const authLimiter = rateLimit({
 app.use('/api/auth/login', authLimiter);
 
 // ─── Rutas ─────────────────────────────────────────────────────────────────
+const authRoutes = require('./routes/authRoutes');
+
 app.get('/', (req, res) => {
   res.json({ message: 'El Tucan Pesca API funcionando' });
 });
+
+app.use('/api/auth', authRoutes);
 
 // ─── Conexión a MongoDB Atlas ──────────────────────────────────────────────
 mongoose
