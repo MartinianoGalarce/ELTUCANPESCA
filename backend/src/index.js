@@ -68,6 +68,9 @@ app.use('/api/products', productRoutes);
 const orderRoutes = require('./routes/orderRoutes');
 app.use('/api/orders', orderRoutes);
 
+const statsRoutes = require('./routes/statsRoutes');
+app.use('/api/stats', statsRoutes);
+
 // ─── Conexión a MongoDB Atlas ──────────────────────────────────────────────
 mongoose
   .connect(process.env.MONGODB_URI)
