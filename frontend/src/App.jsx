@@ -8,6 +8,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/OrderConfirmed';
+import MyOrders from './pages/MyOrders';
+import MyAccount from './pages/MyAccount';
 
 function App() {
   return (
@@ -20,6 +22,10 @@ function App() {
       <Route path="/registro" element={<Register />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/orden-confirmada/:id" element={<OrderConfirmed />} />
+      <Route path="/mis-pedidos" element={<MyOrders />} />
+      <Route path="/mi-cuenta" element={<MyAccount />} />
+      {/* NOTE: ruta temporal hasta que se construya el dashboard admin */}
+      <Route path="/admin" element={<Home />} />
     </Routes>
   );
 }
