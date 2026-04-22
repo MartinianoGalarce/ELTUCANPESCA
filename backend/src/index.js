@@ -37,7 +37,8 @@ app.use((req, res, next) => {
 // NOTE: límite general — 100 requests por IP cada 15 minutos
 const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  // NOTE: en desarrollo subimos el límite para no bloquearnos mientras probamos
+  max: process.env.NODE_ENV === 'development' ? 1000 : 100,
   message: { error: 'Demasiadas solicitudes, intentá de nuevo en 15 minutos.' },
 });
 app.use('/api', generalLimiter);
@@ -45,7 +46,7 @@ app.use('/api', generalLimiter);
 // NOTE: límite estricto para login — 10 intentos por IP cada 15 minutos
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: process.env.NODE_ENV === 'development' ? 100 : 10,
   message: { error: 'Demasiados intentos de login, intentá de nuevo en 15 minutos.' },
 });
 app.use('/api/auth/login', authLimiter);

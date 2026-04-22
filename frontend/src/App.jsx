@@ -10,6 +10,12 @@ import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/OrderConfirmed';
 import MyOrders from './pages/MyOrders';
 import MyAccount from './pages/MyAccount';
+import Dashboard from './pages/admin/Dashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminProductForm from './pages/admin/AdminProductForm';
+import AdminCategories from './pages/admin/AdminCategories';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminSalePresencial from './pages/admin/AdminSalePresencial';
 
 function App() {
   return (
@@ -24,8 +30,13 @@ function App() {
       <Route path="/orden-confirmada/:id" element={<OrderConfirmed />} />
       <Route path="/mis-pedidos" element={<MyOrders />} />
       <Route path="/mi-cuenta" element={<MyAccount />} />
-      {/* NOTE: ruta temporal hasta que se construya el dashboard admin */}
-      <Route path="/admin" element={<Home />} />
+      <Route path="/admin" element={<Dashboard />} />
+      <Route path="/admin/productos" element={<AdminProducts />} />
+      <Route path="/admin/productos/nuevo" element={<AdminProductForm />} />
+      <Route path="/admin/productos/:id" element={<AdminProductForm />} />
+      <Route path="/admin/categorias" element={<AdminCategories />} />
+      <Route path="/admin/ordenes" element={<AdminOrders />} />
+      <Route path="/admin/venta-presencial" element={<AdminSalePresencial />} />
     </Routes>
   );
 }
