@@ -20,6 +20,14 @@ const AdminProductForm = () => {
   const [catLoading, setCatLoading] = useState(false);
   const [catError, setCatError] = useState('');
 
+  // NOTE: images es el array de URLs de Cloudinary ya guardadas (al editar)
+// newFiles son los File objects elegidos pero aún no subidos
+// previews son las URLs locales para mostrar antes de subir
+const [images, setImages] = useState([]);
+const [newFiles, setNewFiles] = useState([]);
+const [previews, setPreviews] = useState([]);
+const [imageLoading, setImageLoading] = useState(false);
+
   const [form, setForm] = useState({
     name: '',
     category: '',
@@ -50,6 +58,12 @@ const AdminProductForm = () => {
             stock: p.stock,
             active: p.active,
           });
+          // NOTE: si el producto ya tiene imagen, la mostramos como imagen actual
+          if (p.images && p.images[0]) {
+            if (p.images && p.images.length > 0) {
+              setImages(p.images);
+}
+          }
         })
         .catch(() => navigate('/admin/productos'));
     }
@@ -60,18 +74,41 @@ const AdminProductForm = () => {
     setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
   };
 
-  // NOTE: crear categoría sin salir del formulario de producto
-  const handleCreateCategory = async () => {
-  if (!newCatName.trim()) {
-    setCatError('El nombre es obligatorio');
+  const handleImageChange = (e) => {
+  const files = Array.from(e.target.files);
+  const total = images.length + newFiles.length + files.length;
+  if (total > 5) {
+    setError('Máximo 5 imágenes por producto');
     return;
   }
-  setCatError('');
-  setCatLoading(true);
+  setNewFiles((prev) => [...prev, ...files]);
+  setPreviews((prev) => [...prev, ...files.map((f) => URL.createObjectURL(f))]);
+  // NOTE: reset del input para poder elegir el mismo archivo de nuevo si hace falta
+  e.target.value = '';
+};
+
+  // NOTE: idx es el índice global — primero van las images guardadas, después los previews nuevos
+const handleRemoveImage = (idx) => {
+  if (idx < images.length) {
+    setImages((prev) => prev.filter((_, i) => i !== idx));
+  } else {
+    const newIdx = idx - images.length;
+    setNewFiles((prev) => prev.filter((_, i) => i !== newIdx));
+    setPreviews((prev) => prev.filter((_, i) => i !== newIdx));
+  }
+};
+
+  // NOTE: crear categoría sin salir del formulario de producto
+  const handleCreateCategory = async () => {
+    if (!newCatName.trim()) {
+      setCatError('El nombre es obligatorio');
+      return;
+    }
+    setCatError('');
+    setCatLoading(true);
     try {
       const res = await api.post('/categories', { name: newCatName, description: newCatDesc });
       await fetchCategories();
-      // NOTE: seleccionar automáticamente la categoría recién creada
       setForm((prev) => ({ ...prev, category: res.data._id }));
       setShowCatModal(false);
       setNewCatName('');
@@ -88,12 +125,28 @@ const AdminProductForm = () => {
     setError('');
     setLoading(true);
     try {
+      let finalImages = [...images];
+
+      if (newFiles.length > 0) {
+        setImageLoading(true);
+        const formData = new FormData();
+        newFiles.forEach((file) => formData.append('images', file));
+        const uploadRes = await api.post('/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        // NOTE: el backend devuelve array de { url, publicId }
+        finalImages = [...finalImages, ...uploadRes.data.map((r) => r.url)];
+        setImageLoading(false);
+      }
+
       const payload = {
         ...form,
         price: Number(form.price),
         cost: Number(form.cost),
         stock: Number(form.stock),
+        images: finalImages,
       };
+
       if (isEditing) {
         await api.patch(`/products/${id}`, payload);
       } else {
@@ -101,11 +154,14 @@ const AdminProductForm = () => {
       }
       navigate('/admin/productos');
     } catch (err) {
+      setImageLoading(false);
       setError(err.response?.data?.error || 'Error al guardar producto');
     } finally {
       setLoading(false);
     }
   };
+
+  // NOTE: imagen que se muestra — primero el preview local, si no la imagen actual de Cloudinary
 
   return (
     <AdminLayout>
@@ -129,6 +185,58 @@ const AdminProductForm = () => {
               {error}
             </div>
           )}
+
+          {/* ─── Imágenes del producto ─────────────────────────────────────── */}
+          <div>
+            <label className="block text-sm font-medium text-dark mb-1">
+              Imágenes del producto
+              <span className="text-gray-400 font-normal ml-1">
+                ({images.length + newFiles.length}/5)
+              </span>
+            </label>
+
+            <div className="flex flex-wrap gap-3">
+              {/* Imágenes ya guardadas en Cloudinary */}
+              {images.map((url, idx) => (
+                <div key={idx} className="relative w-24 h-24">
+                  <img src={url} alt="" className="w-24 h-24 object-cover rounded-xl border border-gray-200" />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(idx)}
+                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors"
+                  >✕</button>
+                </div>
+              ))}
+
+              {/* Previews de imágenes nuevas aún no subidas */}
+              {previews.map((url, idx) => (
+                <div key={idx} className="relative w-24 h-24">
+                  <img src={url} alt="" className="w-24 h-24 object-cover rounded-xl border border-primary border-dashed" />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(images.length + idx)}
+                    className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold transition-colors"
+                  >✕</button>
+                </div>
+              ))}
+
+              {/* Botón agregar — solo si no llegamos a 5 */}
+              {images.length + newFiles.length < 5 && (
+                <label className="flex flex-col items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-primary transition-colors bg-gray-50">
+                  <span className="text-2xl">📷</span>
+                  <span className="text-xs text-gray-500 mt-1">Agregar</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </label>
+              )}
+            </div>
+            <p className="text-xs text-gray-400 mt-1">JPG, PNG o WEBP — máximo 5MB por imagen</p>
+          </div>
 
           <div>
             <label className="block text-sm font-medium text-dark mb-1">Nombre</label>
@@ -180,7 +288,6 @@ const AdminProductForm = () => {
                   <input
                     value={newCatName}
                     onChange={(e) => setNewCatName(e.target.value)}
-                    required
                     placeholder="Nombre de la categoría"
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
                   />
@@ -192,13 +299,13 @@ const AdminProductForm = () => {
                   />
                   <div className="flex gap-2">
                     <button
-                        type="button"
-                        onClick={handleCreateCategory}
-                        disabled={catLoading}
-                        className="bg-primary hover:bg-primary-dark text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-60"
-                        >
-                        {catLoading ? 'Creando...' : 'Crear y seleccionar'}
-                        </button>
+                      type="button"
+                      onClick={handleCreateCategory}
+                      disabled={catLoading}
+                      className="bg-primary hover:bg-primary-dark text-white font-medium px-4 py-2 rounded-lg text-sm transition-colors disabled:opacity-60"
+                    >
+                      {catLoading ? 'Creando...' : 'Crear y seleccionar'}
+                    </button>
                     <button
                       type="button"
                       onClick={() => { setShowCatModal(false); setCatError(''); }}
@@ -282,10 +389,10 @@ const AdminProductForm = () => {
           <div className="flex gap-3 pt-2">
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || imageLoading}
               className="flex-1 bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60"
             >
-              {loading ? 'Guardando...' : isEditing ? 'Guardar cambios' : 'Crear producto'}
+              {imageLoading ? 'Subiendo imagen...' : loading ? 'Guardando...' : isEditing ? 'Guardar cambios' : 'Crear producto'}
             </button>
             <button
               type="button"

@@ -102,6 +102,7 @@ const AdminProducts = () => {
                 <th className="text-left px-4 py-3 text-gray-500 font-medium">Producto</th>
                 <th className="text-left px-4 py-3 text-gray-500 font-medium">Categoría</th>
                 <th className="text-right px-4 py-3 text-gray-500 font-medium">Precio</th>
+                <th className="text-right px-4 py-3 text-gray-500 font-medium">Costo</th>
                 <th className="text-right px-4 py-3 text-gray-500 font-medium">Stock</th>
                 <th className="text-center px-4 py-3 text-gray-500 font-medium">Estado</th>
                 <th className="text-center px-4 py-3 text-gray-500 font-medium">Acciones</th>
@@ -121,6 +122,9 @@ const AdminProducts = () => {
                   </td>
                   <td className="px-4 py-3 text-right font-medium text-dark">
                     ${product.price.toLocaleString('es-AR')}
+                  </td>
+                  <td className="px-4 py-3 text-right font-medium text-dark">
+                    ${product.cost?.toLocaleString('es-AR') || '—'}
                   </td>
                   <td className={`px-4 py-3 text-right font-medium ${product.stock <= 5 ? 'text-red-500' : 'text-dark'}`}>
                     {product.stock}

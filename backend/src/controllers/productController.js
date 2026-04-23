@@ -4,6 +4,7 @@ const Product = require('../models/Product');
 // ─── Obtener todos los productos ───────────────────────────────────────────
 // GET /api/products
 const getProducts = async (req, res) => {
+  console.log('role:', req.user?.role);
   try {
     const { category, search, page = 1, limit = 12 } = req.query;
 
@@ -23,6 +24,7 @@ const getProducts = async (req, res) => {
 
     const [products, total] = await Promise.all([
       Product.find(filter)
+        .select('+cost')
         .populate('category', 'name slug')
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -113,7 +115,7 @@ const updateProduct = async (req, res) => {
       req.params.id,
       { category, name, description, price, cost, stock, images, active },
       { new: true, runValidators: true }
-    ).populate('category', 'name slug');
+    ).select('+cost').populate('category', 'name slug');
 
     if (!product) {
       return res.status(404).json({ error: 'Producto no encontrado' });
