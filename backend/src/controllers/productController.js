@@ -4,29 +4,39 @@ const Product = require('../models/Product');
 // ─── Obtener todos los productos ───────────────────────────────────────────
 // GET /api/products
 const getProducts = async (req, res) => {
-  console.log('role:', req.user?.role);
   try {
-    const { category, search, page = 1, limit = 12 } = req.query;
+    const { category, search, page = 1, limit = 12, sort, minPrice, maxPrice } = req.query;
 
-    // NOTE: construir el filtro dinámicamente según los query params recibidos
     const filter = {};
 
-    // NOTE: la tienda pública solo ve productos activos
     if (req.user?.role !== 'admin') filter.active = true;
-
-    // NOTE: filtrar por categoría si se provee el ID
     if (category) filter.category = category;
-
-    // NOTE: búsqueda por texto en name y description usando el índice de texto
     if (search) filter.$text = { $search: search };
+
+    // NOTE: rango de precio
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+
+    // NOTE: ordenamiento — default más nuevo primero
+    const sortOptions = {
+      newest:     { createdAt: -1 },
+      price_asc:  { price: 1 },
+      price_desc: { price: -1 },
+    };
+    const sortQuery = sortOptions[sort] || sortOptions.newest;
 
     const skip = (Number(page) - 1) * Number(limit);
 
+    const select = req.user?.role === 'admin' ? '+cost' : '-cost';
+
     const [products, total] = await Promise.all([
       Product.find(filter)
-        .select('+cost')
+        .select(select)
         .populate('category', 'name slug')
-        .sort({ createdAt: -1 })
+        .sort(sortQuery)
         .skip(skip)
         .limit(Number(limit)),
       Product.countDocuments(filter),

@@ -27,90 +27,190 @@ const Home = () => {
     fetchData();
   }, []);
 
+  const transferPrice = (price) => Math.round(price * 0.9);
+
   return (
     <Layout>
-      {/* ─── Hero ─────────────────────────────────────────────────────── */}
-      <section className="bg-dark text-white rounded-2xl px-8 py-16 mb-12 text-center">
-        <h1 className="text-4xl font-bold text-primary-light mb-4">
-          Todo para tu aventura
-        </h1>
-        <p className="text-gray-300 text-lg mb-8">
-          Equipamiento de pesca y camping de calidad al mejor precio
-        </p>
-        <Link
-          to="/productos"
-          className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-3 rounded-lg text-lg transition-colors"
-        >
-          Ver productos
-        </Link>
+
+      {/* Hero */}
+      <section className="relative bg-dark text-white rounded-2xl px-8 py-20 mb-12 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent rounded-full translate-y-1/2 -translate-x-1/2" />
+        </div>
+        <div className="relative max-w-2xl">
+          <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
+            Nueva temporada 2025
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+            Todo para tu<br />
+            <span className="text-primary-light">aventura al aire libre</span>
+          </h1>
+          <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+            Equipamiento de pesca y camping de calidad. Envios a todo el pais con el 10% de descuento pagando por transferencia.
+          </p>
+          <div className="flex gap-4 flex-wrap">
+            <Link
+              to="/productos"
+              className="bg-accent hover:bg-accent-dark text-white font-bold px-8 py-3 rounded-lg text-base transition-colors"
+            >
+              Ver catalogo
+            </Link>
+            <Link
+              to="/productos"
+              className="border border-white/30 hover:border-white text-white font-medium px-8 py-3 rounded-lg text-base transition-colors"
+            >
+              Ver ofertas
+            </Link>
+          </div>
+        </div>
       </section>
 
-      {/* ─── Categorías ───────────────────────────────────────────────── */}
+      {/* Beneficios */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div className="text-primary flex-shrink-0 bg-primary/10 p-2 rounded-lg">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 10a2 2 0 002 2h8a2 2 0 002-2L19 8" />
+            </svg>
+          </div>
+          <div>
+            <div className="font-semibold text-dark text-sm mb-1">Envios a todo el pais</div>
+            <div className="text-gray-500 text-xs leading-relaxed">Despachamos por correo privado en 3 a 7 dias habiles</div>
+          </div>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div className="text-primary flex-shrink-0 bg-primary/10 p-2 rounded-lg">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            </svg>
+          </div>
+          <div>
+            <div className="font-semibold text-dark text-sm mb-1">10% OFF por transferencia</div>
+            <div className="text-gray-500 text-xs leading-relaxed">Paga con transferencia bancaria y ahorra en cada compra</div>
+          </div>
+        </div>
+        <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
+          <div className="text-primary flex-shrink-0 bg-primary/10 p-2 rounded-lg">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <div className="font-semibold text-dark text-sm mb-1">Garantia oficial</div>
+            <div className="text-gray-500 text-xs leading-relaxed">12 meses de garantia de fabrica en todos los productos</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categorias */}
       {categories.length > 0 && (
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-dark mb-6">Categorías</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-dark">Explora por categoria</h2>
+            <Link to="/productos" className="text-sm text-primary hover:text-primary-dark transition-colors">
+              Ver todo
+            </Link>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categories.map((cat) => (
               <Link
                 key={cat._id}
                 to={`/productos?category=${cat._id}`}
-                className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:border-primary hover:shadow-md transition-all"
+                className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:border-primary hover:shadow-md transition-all group"
               >
-                <div className="text-primary font-semibold">{cat.name}</div>
+                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
+                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h2z" />
+                  </svg>
+                </div>
+                <div className="text-sm font-semibold text-dark group-hover:text-primary transition-colors">
+                  {cat.name}
+                </div>
               </Link>
             ))}
           </div>
         </section>
       )}
 
-      {/* ─── Productos destacados ─────────────────────────────────────── */}
-      <section>
+      {/* Productos destacados */}
+      <section className="mb-12">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-dark">Productos destacados</h2>
-          <Link to="/productos" className="text-primary hover:text-primary-dark font-medium text-sm">
-            Ver todos →
+          <h2 className="text-xl font-bold text-dark">Productos destacados</h2>
+          <Link to="/productos" className="text-sm text-primary hover:text-primary-dark transition-colors">
+            Ver todos
           </Link>
         </div>
-
         {loading ? (
           <div className="text-center py-12 text-gray-400">Cargando productos...</div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {featured.map((product) => (
-              <Link
-                key={product._id}
-                to={`/productos/${product.slug}`}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all"
-              >
-                {/* ─── Imagen ─────────────────────────────────────── */}
-                <div className="bg-gray-100 h-44 flex items-center justify-center">
+              <div key={product._id} className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all group">
+                <div className="relative h-44 bg-gray-100">
                   {product.images?.[0] ? (
                     <img
                       src={product.images[0]}
                       alt={product.name}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   ) : (
-                    <span className="text-gray-400 text-sm">Sin imagen</span>
+                    <div className="h-full flex items-center justify-center text-gray-400 text-sm">Sin imagen</div>
+                  )}
+                  {product.category?.name && (
+                    <span className="absolute top-2 left-2 bg-primary text-white text-xs font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
+                      {product.category.name}
+                    </span>
+                  )}
+                  {product.stock > 0 && product.stock <= 5 && (
+                    <span className="absolute top-2 right-2 bg-accent text-white text-xs font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
+                      Low Stock
+                    </span>
+                  )}
+                  {product.stock === 0 && (
+                    <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded uppercase tracking-wide">
+                      Sin Stock
+                    </span>
                   )}
                 </div>
-                {/* ─── Info ───────────────────────────────────────── */}
                 <div className="p-4">
-                  <div className="text-sm font-medium text-dark mb-1 line-clamp-2">
+                  <div className="text-sm font-medium text-dark mb-2 line-clamp-2 min-h-[2.5rem]">
                     {product.name}
                   </div>
-                  <div className="text-accent font-bold text-lg">
-                    ${product.price.toLocaleString('es-AR')}
+                  <div className="mb-3">
+                    <div className="text-gray-400 text-xs line-through">${product.price.toLocaleString('es-AR')}</div>
+                    <div className="text-accent font-bold text-lg leading-tight">${transferPrice(product.price).toLocaleString('es-AR')}</div>
+                    <div className="text-gray-400 text-xs">con transferencia</div>
                   </div>
-                  {product.stock === 0 && (
-                    <div className="text-xs text-red-500 mt-1">Sin stock</div>
-                  )}
+                  <Link
+                    to={`/productos/${product.slug}`}
+                    className="block w-full text-center border border-dark text-dark hover:bg-dark hover:text-white text-sm font-medium py-2 rounded-lg transition-colors"
+                  >
+                    Ver detalle
+                  </Link>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}
       </section>
+
+      {/* Banner CTA */}
+      <section className="bg-primary rounded-2xl px-8 py-12 text-center text-white mb-4">
+        <h2 className="text-2xl font-bold mb-2">Necesitas asesoramiento?</h2>
+        <p className="text-primary-light mb-6 text-sm">
+          Seguinos en Instagram y consultanos por cualquier producto
+        </p>
+        <a
+          href="https://instagram.com/eltucanpesca"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-white text-primary font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          @eltucanpesca
+        </a>
+      </section>
+
     </Layout>
   );
 };
