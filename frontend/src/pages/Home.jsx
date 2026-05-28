@@ -39,7 +39,7 @@ const Home = () => {
         
         <div className="relative max-w-2xl px-8">
           <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
-            Nueva temporada 2025
+            Nueva temporada 2026
           </span>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
             Todo para tu<br />
@@ -201,12 +201,12 @@ const Home = () => {
           Seguinos en Instagram y consultanos por cualquier producto
         </p>
         <a
-          href="https://instagram.com/eltucanpesca"
+          href="https://instagram.com/_eltucanpesca"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block bg-white text-primary font-bold px-8 py-3 rounded-lg hover:bg-gray-100 transition-colors"
         >
-          @eltucanpesca
+          @_eltucanpesca
         </a>
       </section>
 
