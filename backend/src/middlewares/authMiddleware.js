@@ -43,7 +43,6 @@ const requireAdmin = (req, res, next) => {
 // se usa en rutas publicas que tienen comportamiento diferente para admin
 const optionalToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log('optionalToken - authHeader:', authHeader ? 'presente' : 'ausente');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return next();
   }
@@ -51,7 +50,6 @@ const optionalToken = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     User.findById(decoded.id).then((user) => {
-      console.log('optionalToken - user role:', user?.role);
       if (user) req.user = user;
       next();
     });
