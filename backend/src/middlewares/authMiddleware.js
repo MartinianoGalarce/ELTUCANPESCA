@@ -61,5 +61,3 @@ const optionalToken = (req, res, next) => {
 };
 
 module.exports = { verifyToken, requireAdmin, optionalToken };
-
-module.exports = { verifyToken, requireAdmin };
