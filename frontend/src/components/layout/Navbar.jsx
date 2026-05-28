@@ -36,13 +36,14 @@ const Navbar = () => {
       <nav className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
 
-          {/* ─── Logo ───────────────────────────────────────────────── */}
-          <Link to="/" className="flex-shrink-0">
-            <span className="text-2xl font-bold text-dark tracking-tight">
-              El Tucán <span className="text-primary">Pesca</span>
-            </span>
-          </Link>
-
+            {/* ─── Logo ───────────────────────────────────────────────── */}
+            <Link to="/" className="flex-shrink-0 flex items-center gap-2">
+              <img src="/logo_tucan.jpg" alt="El Tucán Pesca" className="h-10 w-10 rounded-full object-cover" />
+              <span className="text-2xl font-bold text-dark tracking-tight">
+                El Tucán <span className="text-primary">Pesca</span>
+              </span>
+            </Link>
+            
           {/* ─── Links principales ──────────────────────────────────── */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
             <Link to="/" className="hover:text-dark transition-colors">
