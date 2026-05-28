@@ -39,7 +39,7 @@ const Navbar = () => {
             {/* ─── Logo ───────────────────────────────────────────────── */}
             <Link to="/" className="flex-shrink-0 flex items-center gap-2">
               <img src="/logo_tucan.jpg" alt="El Tucán Pesca" className="h-10 w-10 rounded-full object-cover" />
-              <span className="text-2xl font-bold text-dark tracking-tight">
+              <span className="hidden sm:block text-2xl font-bold text-dark tracking-tight">
                 El Tucán <span className="text-primary">Pesca</span>
               </span>
             </Link>
