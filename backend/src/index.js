@@ -46,7 +46,7 @@ app.use('/api', generalLimiter);
 // NOTE: límite estricto para login — 10 intentos por IP cada 15 minutos
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'development' ? 100 : 10,
+  max: process.env.NODE_ENV === 'development' ? 100 : 50,
   message: { error: 'Demasiados intentos de login, intentá de nuevo en 15 minutos.' },
 });
 app.use('/api/auth/login', authLimiter);
