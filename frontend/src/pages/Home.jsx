@@ -33,12 +33,11 @@ const Home = () => {
     <Layout>
 
       {/* Hero */}
-      <section className="relative bg-dark text-white rounded-2xl px-8 py-20 mb-12 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent rounded-full translate-y-1/2 -translate-x-1/2" />
-        </div>
-        <div className="relative max-w-2xl">
+      <section className="relative text-white rounded-2xl py-20 mb-12 overflow-hidden" style={{ backgroundImage: "url('/hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        {/* Overlay oscuro para que el texto se lea bien */}
+        <div className="absolute inset-0 bg-black/50 rounded-2xl" />
+        
+        <div className="relative max-w-2xl px-8">
           <span className="inline-block bg-accent/20 text-accent text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
             Nueva temporada 2025
           </span>
@@ -46,7 +45,7 @@ const Home = () => {
             Todo para tu<br />
             <span className="text-primary-light">aventura al aire libre</span>
           </h1>
-          <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+          <p className="text-gray-200 text-lg mb-8 leading-relaxed">
             Equipamiento de pesca y camping de calidad. Envios a todo el pais con el 10% de descuento pagando por transferencia.
           </p>
           <div className="flex gap-4 flex-wrap">
