@@ -12,6 +12,9 @@ dotenv.config();
 
 const app = express();
 
+// NOTE: necesario en Render — el proxy de Render agrega el header X-Forwarded-For
+app.set('trust proxy', 1);
+
 // ─── Middlewares de seguridad ──────────────────────────────────────────────
 
 // NOTE: helmet setea headers HTTP seguros automáticamente
