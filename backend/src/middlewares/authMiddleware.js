@@ -39,4 +39,25 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
+// NOTE: verifica el token si existe, pero no bloquea si no hay token
+// se usa en rutas publicas que tienen comportamiento diferente para admin
+const optionalToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next();
+  }
+  try {
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    User.findById(decoded.id).then((user) => {
+      if (user) req.user = user;
+      next();
+    });
+  } catch {
+    next();
+  }
+};
+
+module.exports = { verifyToken, requireAdmin, optionalToken };
+
 module.exports = { verifyToken, requireAdmin };

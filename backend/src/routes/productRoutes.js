@@ -9,10 +9,10 @@ const {
   updateProduct,
   deleteProduct,
 } = require('../controllers/productController');
-const { verifyToken, requireAdmin } = require('../middlewares/authMiddleware');
+const { verifyToken, requireAdmin, optionalToken } = require('../middlewares/authMiddleware');
 
 // ─── Rutas públicas ────────────────────────────────────────────────────────
-router.get('/', getProducts);
+router.get('/', optionalToken, getProducts);
 router.get('/:slug', getProductBySlug);
 
 // ─── Rutas privadas (solo admin) ───────────────────────────────────────────
