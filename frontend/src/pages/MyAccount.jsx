@@ -65,9 +65,12 @@ const MyAccount = () => {
               <div className="font-bold text-dark text-lg">{user?.name}</div>
               <div className="text-gray-500 text-sm">{user?.email}</div>
               {user?.role === 'admin' && (
-                <span className="text-xs bg-primary text-white px-2 py-0.5 rounded-full mt-1 inline-block">
-                  Admin
-                </span>
+                <Link 
+                  to="/admin" className="mt-1 inline-block">
+                  <span className="text-xs bg-primary text-white px-2 py-0.5 rounded-full mt-1 inline-block">
+                    Admin - Ir al dashboard
+                  </span>
+                </Link>
               )}
             </div>
           </div>

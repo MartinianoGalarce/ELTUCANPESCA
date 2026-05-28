@@ -11,6 +11,7 @@ const Catalog = () => {
   const [total, setTotal] = useState(0);
   const [pages, setPages] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -70,6 +71,7 @@ const Catalog = () => {
     if (priceRange[0] > 0) params.minPrice = priceRange[0];
     if (priceRange[1] < 10000000) params.maxPrice = priceRange[1];
     setSearchParams(params);
+    setSidebarOpen(false);
   };
 
   const handleSort = (value) => {
@@ -95,87 +97,112 @@ const Catalog = () => {
 
   const transferPrice = (price) => Math.round(price * 0.9);
 
+  // NOTE: contenido del sidebar — reutilizado en desktop y en el drawer mobile
+  const SidebarContent = () => (
+    <>
+      <div className="mb-6">
+        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          Categorias
+        </h3>
+        <div className="space-y-2">
+          {categories.map((cat) => (
+            <label key={cat._id} className="flex items-center gap-2 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={selectedCategories.includes(cat._id)}
+                onChange={() => handleCategoryToggle(cat._id)}
+                className="w-4 h-4 accent-primary"
+              />
+              <span className="text-sm text-gray-600 group-hover:text-dark transition-colors">
+                {cat.name}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+          Rango de precio
+        </h3>
+        <ReactSlider
+          className="w-full h-2 bg-gray-200 rounded-full my-4"
+          thumbClassName="w-4 h-4 bg-primary rounded-full cursor-pointer focus:outline-none -top-1.5 border-2 border-white shadow"
+          trackClassName="h-2 rounded-full"
+          value={priceRange}
+          min={0}
+          max={500000}
+          step={1000}
+          onChange={(val) => setPriceRange(val)}
+          pearling
+          minDistance={10000}
+          renderTrack={(props, state) => (
+            <div
+              {...props}
+              className={`h-2 rounded-full ${state.index === 1 ? 'bg-primary' : 'bg-gray-200'}`}
+            />
+          )}
+        />
+        <div className="flex justify-between text-xs text-gray-500 mt-1">
+          <span>${priceRange[0].toLocaleString('es-AR')}</span>
+          <span>${priceRange[1].toLocaleString('es-AR')}</span>
+        </div>
+        {(searchParams.get('minPrice') || searchParams.get('maxPrice')) && (
+          <button
+            onClick={() => {
+              setPriceRange([0, 500000]);
+              const params = {};
+              if (category) params.category = category;
+              if (search) params.search = search;
+              if (sort !== 'newest') params.sort = sort;
+              setSearchParams(params);
+            }}
+            className="text-xs text-red-400 hover:text-red-600 mt-2 transition-colors"
+          >
+            Limpiar rango
+          </button>
+        )}
+      </div>
+
+      <button
+        onClick={handleApplyFilters}
+        className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 rounded-lg text-sm transition-colors"
+      >
+        Aplicar Filtros
+      </button>
+    </>
+  );
+
   return (
     <Layout>
+
+      {/* ─── Drawer mobile (overlay) ──────────────────────────────────── */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setSidebarOpen(false)}
+          />
+          <div className="absolute left-0 top-0 h-full w-72 bg-white p-6 overflow-y-auto shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <span className="font-bold text-dark">Filtros</span>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="text-gray-400 hover:text-dark text-xl"
+              >
+                ✕
+              </button>
+            </div>
+            <SidebarContent />
+          </div>
+        </div>
+      )}
+
       <div className="flex gap-8 items-start">
 
-        {/* ─── Sidebar filtros ────────────────────────────────────────── */}
-        <aside className="w-52 flex-shrink-0 sticky top-4">
-
-          {/* Categorías */}
-          <div className="mb-6">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-              Categorías
-            </h3>
-            <div className="space-y-2">
-              {categories.map((cat) => (
-                <label key={cat._id} className="flex items-center gap-2 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(cat._id)}
-                    onChange={() => handleCategoryToggle(cat._id)}
-                    className="w-4 h-4 accent-primary"
-                  />
-                  <span className="text-sm text-gray-600 group-hover:text-dark transition-colors">
-                    {cat.name}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* Rango de precio */}
-          <div className="mb-6">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-              Rango de precio
-            </h3>
-            <ReactSlider
-              className="w-full h-2 bg-gray-200 rounded-full my-4"
-              thumbClassName="w-4 h-4 bg-primary rounded-full cursor-pointer focus:outline-none -top-1.5 border-2 border-white shadow"
-              trackClassName="h-2 rounded-full"
-              value={priceRange}
-              min={0}
-              max={500000}
-              step={1000}
-              onChange={(val) => setPriceRange(val)}
-              pearling
-              minDistance={10000}
-              renderTrack={(props, state) => (
-                <div
-                  {...props}
-                  className={`h-2 rounded-full ${state.index === 1 ? 'bg-primary' : 'bg-gray-200'}`}
-                />
-              )}
-            />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>${priceRange[0].toLocaleString('es-AR')}</span>
-              <span>${priceRange[1].toLocaleString('es-AR')}</span>
-            </div>
-            {(searchParams.get('minPrice') || searchParams.get('maxPrice')) && (
-              <button
-                onClick={() => {
-                  setPriceRange([0, 500000]);
-                  const params = {};
-                  if (category) params.category = category;
-                  if (search) params.search = search;
-                  if (sort !== 'newest') params.sort = sort;
-                  setSearchParams(params);
-                }}
-                className="text-xs text-red-400 hover:text-red-600 mt-2 transition-colors"
-              >
-                Limpiar rango
-              </button>
-            )}
-          </div>
-
-          {/* Botón aplicar */}
-          <button
-            onClick={handleApplyFilters}
-            className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2 rounded-lg text-sm transition-colors"
-          >
-            Aplicar Filtros
-          </button>
-
+        {/* ─── Sidebar desktop ──────────────────────────────────────────── */}
+        <aside className="hidden md:block w-52 flex-shrink-0 sticky top-4">
+          <SidebarContent />
         </aside>
 
         {/* ─── Contenido principal ────────────────────────────────────── */}
@@ -183,17 +210,29 @@ const Catalog = () => {
 
           {/* ─── Header resultados + ordenar ──────────────────────────── */}
           <div className="bg-white border border-gray-200 rounded-xl px-4 py-3 flex items-center justify-between mb-6">
-            <div className="text-sm text-gray-600">
-              Mostrando <span className="font-bold text-dark">{products.length} productos</span> de {total}
+            <div className="flex items-center gap-3">
+              {/* Botón filtros — solo mobile */}
+              <button
+                onClick={() => setSidebarOpen(true)}
+                className="md:hidden flex items-center gap-1.5 border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:border-primary transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z" />
+                </svg>
+                Filtros
+              </button>
+              <div className="text-sm text-gray-600 hidden sm:block">
+                Mostrando <span className="font-bold text-dark">{products.length}</span> de {total}
+              </div>
             </div>
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span>Ordenar por:</span>
+              <span className="hidden sm:inline">Ordenar por:</span>
               <select
                 value={sort}
                 onChange={(e) => handleSort(e.target.value)}
                 className="font-semibold text-dark bg-transparent focus:outline-none cursor-pointer border border-gray-200 rounded-lg px-2 py-1 text-sm"
               >
-                <option value="newest">Lo más nuevo</option>
+                <option value="newest">Lo mas nuevo</option>
                 <option value="price_asc">Menor precio</option>
                 <option value="price_desc">Mayor precio</option>
               </select>
@@ -206,13 +245,13 @@ const Catalog = () => {
           ) : products.length === 0 ? (
             <div className="text-center py-12 text-gray-400">No se encontraron productos.</div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               {products.map((product) => (
                 <div
                   key={product._id}
                   className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-all group"
                 >
-                  <div className="relative h-48 bg-gray-100">
+                  <div className="relative h-36 sm:h-44 md:h-48 bg-gray-100">
                     {product.images?.[0] ? (
                       <img
                         src={product.images[0]}
@@ -241,24 +280,24 @@ const Catalog = () => {
                     )}
                   </div>
 
-                  <div className="p-4">
-                    <div className="text-sm font-medium text-dark mb-2 line-clamp-2 min-h-[2.5rem]">
+                  <div className="p-3 md:p-4">
+                    <div className="text-xs md:text-sm font-medium text-dark mb-2 line-clamp-2 min-h-[2.5rem]">
                       {product.name}
                     </div>
                     <div className="mb-3">
                       <div className="text-gray-400 text-xs line-through">
                         ${product.price.toLocaleString('es-AR')}
                       </div>
-                      <div className="text-accent font-bold text-lg leading-tight">
+                      <div className="text-accent font-bold text-base md:text-lg leading-tight">
                         ${transferPrice(product.price).toLocaleString('es-AR')}
                       </div>
-                      <div className="text-gray-400 text-xs">
+                      <div className="text-gray-400 text-xs hidden sm:block">
                         Precio pagando con Transferencia
                       </div>
                     </div>
                     <Link
                       to={`/productos/${product.slug}`}
-                      className="block w-full text-center border border-dark text-dark hover:bg-dark hover:text-white text-sm font-medium py-2 rounded-lg transition-colors"
+                      className="block w-full text-center border border-dark text-dark hover:bg-dark hover:text-white text-xs md:text-sm font-medium py-1.5 md:py-2 rounded-lg transition-colors"
                     >
                       Ver detalle
                     </Link>
