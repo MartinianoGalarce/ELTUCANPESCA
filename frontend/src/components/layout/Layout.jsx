@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
           <div>
             <div className="text-gray-300 font-semibold text-xs uppercase tracking-wider mb-3">Información</div>
             <div className="flex flex-col gap-2 text-gray-500">
-              <span className="hover:text-white cursor-pointer transition-colors">Instagram: @eltucanpesca</span>
+              <span className="hover:text-white cursor-pointer transition-colors">Instagram: @_eltucanpesca</span>
               <span className="hover:text-white cursor-pointer transition-colors">Envíos y devoluciones</span>
               <span className="hover:text-white cursor-pointer transition-colors">Términos y condiciones</span>
             </div>
@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
         </div>
 
         <div className="max-w-7xl mx-auto border-t border-gray-800 mt-8 pt-6 text-center text-xs text-gray-600">
-          © 2025 El Tucán Pesca & Camping — Todos los derechos reservados
+          © 2026 El Tucán Pesca & Camping — Todos los derechos reservados
         </div>
       </footer>
     </div>
