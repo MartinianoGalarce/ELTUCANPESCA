@@ -45,9 +45,18 @@ const Home = () => {
             Todo para tu<br />
             <span className="text-primary-light">aventura al aire libre</span>
           </h1>
-          <p className="text-gray-200 text-lg mb-8 leading-relaxed">
-            Equipamiento de pesca y camping de calidad. Envios a todo el pais con el 10% de descuento pagando por transferencia.
+          <p className="text-gray-200 text-lg mb-4 leading-relaxed">
+            Equipamiento de pesca y camping de calidad. Envios a todo el pais.
           </p>
+          <div className="flex items-center gap-2 text-gray-300 text-sm mb-8">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <a href="https://maps.app.goo.gl/cT6qEuyvkv8vNyT77" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+              Tapalque, Provincia de Buenos Aires
+            </a>
+          </div>
           <div className="flex gap-4 flex-wrap">
             <Link
               to="/productos"
@@ -55,12 +64,14 @@ const Home = () => {
             >
               Ver catalogo
             </Link>
-            <Link
-              to="/productos"
+            
+            <a href="https://maps.app.goo.gl/cT6qEuyvkv8vNyT77"
+              target="_blank"
+              rel="noopener noreferrer"
               className="border border-white/30 hover:border-white text-white font-medium px-8 py-3 rounded-lg text-base transition-colors"
             >
-              Ver ofertas
-            </Link>
+              Como llegar
+            </a>
           </div>
         </div>
       </section>
@@ -85,19 +96,24 @@ const Home = () => {
             </svg>
           </div>
           <div>
-            <div className="font-semibold text-dark text-sm mb-1">10% OFF por transferencia</div>
-            <div className="text-gray-500 text-xs leading-relaxed">Paga con transferencia bancaria y ahorra en cada compra</div>
+            <div className="font-semibold text-dark text-sm mb-1">Asesoramiento personalizado</div>
+            <div className="text-gray-500 text-xs leading-relaxed">Te ayudamos a elegir el equipo ideal para cada salida</div>
           </div>
         </div>
         <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-4">
           <div className="text-primary flex-shrink-0 bg-primary/10 p-2 rounded-lg">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div>
-            <div className="font-semibold text-dark text-sm mb-1">Garantia oficial</div>
-            <div className="text-gray-500 text-xs leading-relaxed">12 meses de garantia de fabrica en todos los productos</div>
+            <div className="font-semibold text-dark text-sm mb-1">Retiro en Tapalque</div>
+            <div className="text-gray-500 text-xs leading-relaxed">
+              <a href="https://maps.app.goo.gl/cT6qEuyvkv8vNyT77" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                Ver ubicacion en Maps
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -177,9 +193,7 @@ const Home = () => {
                     {product.name}
                   </div>
                   <div className="mb-3">
-                    <div className="text-gray-400 text-xs line-through">${product.price.toLocaleString('es-AR')}</div>
-                    <div className="text-accent font-bold text-lg leading-tight">${transferPrice(product.price).toLocaleString('es-AR')}</div>
-                    <div className="text-gray-400 text-xs">con transferencia</div>
+                    <div className="text-accent font-bold text-lg leading-tight">${product.price.toLocaleString('es-AR')}</div>
                   </div>
                   <Link
                     to={`/productos/${product.slug}`}
