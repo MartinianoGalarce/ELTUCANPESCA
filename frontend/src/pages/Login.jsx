@@ -82,6 +82,12 @@ const Login = () => {
             >
               {loading ? 'Ingresando...' : 'Ingresar'}
             </button>
+
+            <div className="text-center mt-3">
+              <Link to="/olvide-contrasena" className="text-sm text-gray-400 hover:text-primary transition-colors">
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
           </form>
         </div>
       </div>

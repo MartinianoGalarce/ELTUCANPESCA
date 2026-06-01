@@ -13,6 +13,8 @@ import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/OrderConfirmed';
 import NotFound from './pages/NotFound';
 import VerifyEmail from './pages/VerifyEmail';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Páginas de usuario
 import MyOrders from './pages/MyOrders';
@@ -40,6 +42,8 @@ function App() {
       {/* ── 404 ───────────────────────────────────────────────────────── */}
       <Route path="*" element={<NotFound />} />
       <Route path="/verificar-email" element={<VerifyEmail />} />
+      <Route path="/olvide-contrasena" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* ── Privadas (usuario logueado) ─────────────────────────────────── */}
       <Route path="/checkout" element={
