@@ -23,6 +23,7 @@ import AdminProductForm from './pages/admin/AdminProductForm';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminSalePresencial from './pages/admin/AdminSalePresencial';
+import AdminBanner from './pages/admin/AdminBanner';
 
 function App() {
   return (
@@ -71,6 +72,9 @@ function App() {
       <Route path="/admin/venta-presencial" element={
         <PrivateRoute adminOnly><AdminSalePresencial /></PrivateRoute>
       } />
+      <Route path="/admin/banner" element={
+      <PrivateRoute adminOnly><AdminBanner /></PrivateRoute>
+    } />
     </Routes>
   );
 }

@@ -20,6 +20,7 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/categorias', label: 'Categorias', icon: '📁' },
     { path: '/admin/ordenes', label: 'Ordenes', icon: '📦' },
     { path: '/admin/venta-presencial', label: 'Venta presencial', icon: '💵' },
+    { path: '/admin/banner', label: 'Banner', icon: '📢' },
   ];
 
   const SidebarContent = () => (

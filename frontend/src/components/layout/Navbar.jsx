@@ -21,7 +21,7 @@ const Navbar = () => {
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    axios.get(`${API}/api/settings/banner`)
+    axios.get(`${API}/settings/banner`)
       .then(res => {
         if (res.data.messages?.length > 0) {
           setBannerMessages(res.data.messages);
@@ -71,10 +71,10 @@ const Navbar = () => {
 
       {/* ─── Navbar principal ───────────────────────────────────────── */}
       <nav className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto flex items-center gap-6">
 
             {/* ─── Logo ───────────────────────────────────────────────── */}
-            <Link to="/" className="flex-shrink-0 flex items-center gap-2">
+            <Link to="/" className="flex-1 flex items-center gap-2">
               <img src="/logo_tucan.jpg" alt="El Tucán Pesca" className="h-10 w-10 rounded-full object-cover" />
               <span className="hidden sm:block text-2xl font-bold text-dark tracking-tight">
                 El Tucán <span className="text-primary">Pesca</span>
@@ -82,7 +82,7 @@ const Navbar = () => {
             </Link>
             
           {/* ─── Links principales ──────────────────────────────────── */}
-          <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+            <div className="hidden md:flex flex-1 justify-center items-center gap-8 text-sm font-medium text-gray-600">
             <Link to="/" className="hover:text-dark transition-colors">Home</Link>
             <Link to="/productos" className="hover:text-dark transition-colors">Catálogo</Link>
             {user && (
@@ -94,7 +94,7 @@ const Navbar = () => {
           </div>
 
           {/* ─── Iconos derecha ─────────────────────────────────────── */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-1 justify-end items-center gap-4">
 
             {/* Búsqueda */}
             {searchOpen ? (
@@ -150,11 +150,11 @@ const Navbar = () => {
                 >Salir</button>
               </div>
             ) : (
-              <Link to="/login" className="text-gray-500 hover:text-dark transition-colors" aria-label="Ingresar">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 518 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </Link>
+            <Link to="/login" className="text-gray-500 hover:text-dark transition-colors" aria-label="Ingresar">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </Link>
             )}
           </div>
         </div>
