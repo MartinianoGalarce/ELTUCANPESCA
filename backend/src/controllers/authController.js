@@ -216,4 +216,34 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getMe, updateMe, verifyEmail, forgotPassword, resetPassword };
+// ─── Cambiar contraseña (estando logueado) ─────────────────────────────────
+// PATCH /api/auth/change-password
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' });
+    }
+
+    const user = await User.findById(req.user._id).select('+password');
+    const isMatch = await user.comparePassword(currentPassword);
+
+    if (!isMatch) {
+      return res.status(400).json({ error: 'La contraseña actual es incorrecta' });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    res.json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al cambiar contraseña', detail: error.message });
+  }
+};
+
+module.exports = { register, login, getMe, updateMe, verifyEmail, forgotPassword, resetPassword, changePassword };

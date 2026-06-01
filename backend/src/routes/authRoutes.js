@@ -9,6 +9,7 @@ const {
   verifyEmail,
   forgotPassword,
   resetPassword,
+  changePassword,
 } = require('../controllers/authController');
 const { verifyToken } = require('../middlewares/authMiddleware');
 
@@ -22,5 +23,6 @@ router.post('/reset-password', resetPassword);
 // ─── Rutas privadas (requieren token) ─────────────────────────────────────
 router.get('/me', verifyToken, getMe);
 router.patch('/me', verifyToken, updateMe);
+router.patch('/change-password', verifyToken, changePassword);
 
 module.exports = router;
