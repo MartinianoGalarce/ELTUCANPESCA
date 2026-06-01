@@ -153,8 +153,8 @@ const Checkout = () => {
                 />
                 <div>
                   <div className="font-medium text-dark">Transferencia bancaria</div>
-                  <div className="text-accent text-sm font-medium">10% de descuento</div>
-                  <div className="text-gray-500 text-xs">Total: ${(total * 0.9).toLocaleString('es-AR')}</div>
+                  <div className="text-gray-500 text-xs">Realizá la transferencia y envianos el comprobante</div>
+                  <div className="text-gray-500 text-xs">Total: ${total.toLocaleString('es-AR')}</div>
                 </div>
               </label>
               <label className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'mercadopago' ? 'border-primary bg-green-50' : 'border-gray-200'}`}>
@@ -211,12 +211,6 @@ const Checkout = () => {
                 <span>Total</span>
                 <span>${total.toLocaleString('es-AR')}</span>
               </div>
-              {paymentMethod === 'transfer' && (
-                <div className="flex justify-between text-accent font-bold mt-1">
-                  <span>Con transferencia</span>
-                  <span>${(total * 0.9).toLocaleString('es-AR')}</span>
-                </div>
-              )}
             </div>
           </div>
         </div>

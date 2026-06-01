@@ -131,9 +131,6 @@ const Cart = () => {
                 <span>Total</span>
                 <span>${total.toLocaleString('es-AR')}</span>
               </div>
-              <div className="text-xs text-accent mt-1">
-                ${(total * 0.9).toLocaleString('es-AR')} pagando con transferencia
-              </div>
             </div>
 
             <button

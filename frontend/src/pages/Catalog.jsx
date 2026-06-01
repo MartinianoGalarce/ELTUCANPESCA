@@ -95,7 +95,6 @@ const Catalog = () => {
     setSearchParams(params);
   };
 
-  const transferPrice = (price) => Math.round(price * 0.9);
 
   // NOTE: contenido del sidebar — reutilizado en desktop y en el drawer mobile
   const SidebarContent = () => (
@@ -285,15 +284,15 @@ const Catalog = () => {
                       {product.name}
                     </div>
                     <div className="mb-3">
-                      <div className="text-gray-400 text-xs line-through">
+                      <div className="text-accent font-bold text-base md:text-lg leading-tight">
                         ${product.price.toLocaleString('es-AR')}
                       </div>
-                      <div className="text-accent font-bold text-base md:text-lg leading-tight">
-                        ${transferPrice(product.price).toLocaleString('es-AR')}
-                      </div>
-                      <div className="text-gray-400 text-xs hidden sm:block">
-                        Precio pagando con Transferencia
-                      </div>
+                      {product.stock > 0 ? (
+                        <div className="flex items-center gap-1 mt-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                          <span className="text-xs text-gray-400">{product.stock} disponibles</span>
+                        </div>
+                      ) : null}
                     </div>
                     <Link
                       to={`/productos/${product.slug}`}
