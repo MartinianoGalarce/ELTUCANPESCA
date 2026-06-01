@@ -163,6 +163,29 @@ const AdminOrders = () => {
                       </div>
                     </div>
 
+                    {/* ─── Comprobante de transferencia ────────────────── */}
+                    {order.paymentMethod === 'transfer' && (
+                      <div className="mt-4 pt-4 border-t border-gray-200">
+                        <div className="text-xs font-medium text-gray-500 mb-2">COMPROBANTE</div>
+                        {order.transferReceipt ? (
+                          
+                          <a href={order.transferReceipt}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary-dark font-medium transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Ver comprobante
+                          </a>
+                        ) : (
+                          <span className="text-sm text-gray-400">Sin comprobante todavía</span>
+                        )}
+                      </div>
+                    )}
+                    
                     {/* ─── Cambiar estado ───────────────────────────────── */}
                     {transitions.length > 0 && (
                       <div className="mt-4 pt-4 border-t border-gray-200">

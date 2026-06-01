@@ -72,6 +72,12 @@ const OrderConfirmed = () => {
                 <div className="text-xs text-amber-600 mt-2">
                   Una vez confirmado el pago te avisamos por email.
                 </div>
+                <Link
+                  to="/mis-pedidos"
+                  className="inline-block mt-2 text-xs text-amber-700 font-medium underline hover:text-amber-900 transition-colors"
+                >
+                  → Subir comprobante desde Mis Pedidos
+                </Link>
               </div>
             )}
 

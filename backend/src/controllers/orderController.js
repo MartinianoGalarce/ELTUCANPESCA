@@ -176,4 +176,50 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getMyOrders, getOrderById, getAllOrders, updateOrderStatus };
+// ─── Subir comprobante de transferencia ────────────────────────────────────
+// POST /api/orders/:id/receipt
+const uploadReceipt = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ error: 'Orden no encontrada' });
+    }
+
+    // NOTE: solo el dueño de la orden puede subir el comprobante
+    if (order.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ error: 'Acceso denegado' });
+    }
+
+    if (order.paymentMethod !== 'transfer') {
+      return res.status(400).json({ error: 'Esta orden no es por transferencia' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No se recibió ningún archivo' });
+    }
+
+    const cloudinary = require('../config/cloudinary');
+
+    // NOTE: subir buffer a cloudinary sin guardar en disco
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: 'eltucan/receipts' },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(req.file.buffer);
+    });
+
+    order.transferReceipt = result.secure_url;
+    await order.save();
+
+    res.json({ message: 'Comprobante subido correctamente', url: result.secure_url });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al subir el comprobante', detail: error.message });
+  }
+};
+
+module.exports = { createOrder, getMyOrders, getOrderById, getAllOrders, updateOrderStatus, uploadReceipt };

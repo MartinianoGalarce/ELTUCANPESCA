@@ -84,6 +84,12 @@ const orderSchema = new mongoose.Schema(
       phone:    { type: String, required: true },
     },
 
+    // NOTE: URL del comprobante de transferencia subido por el cliente
+    transferReceipt: {
+      type: String,
+      default: '',
+    },
+
     trackingNumber: {
       type: String,
       default: '',
