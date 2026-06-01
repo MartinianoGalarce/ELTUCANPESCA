@@ -20,18 +20,30 @@ const Navbar = () => {
   const [currentMsg, setCurrentMsg] = useState(0);
   const intervalRef = useRef(null);
 
-  useEffect(() => {
-    axios.get(`${API}/settings/banner`)
-      .then(res => {
-        if (res.data.messages?.length > 0) {
-          setBannerMessages(res.data.messages);
-          setBannerActive(res.data.active);
-        }
-      })
-      .catch(() => {
-        // NOTE: si falla silenciosamente, no mostramos nada
-      });
-  }, []);
+useEffect(() => {
+  // NOTE: si ya tenemos los mensajes en session, los usamos directamente
+  const cached = sessionStorage.getItem('bannerMessages');
+  if (cached) {
+    const parsed = JSON.parse(cached);
+    setBannerMessages(parsed.messages);
+    setBannerActive(parsed.active);
+    return;
+  }
+
+  axios.get(`${API}/settings/banner`)
+    .then(res => {
+      if (res.data.messages?.length > 0) {
+        setBannerMessages(res.data.messages);
+        setBannerActive(res.data.active);
+        // NOTE: guardamos en session para no volver a fetchear
+        sessionStorage.setItem('bannerMessages', JSON.stringify({
+          messages: res.data.messages,
+          active: res.data.active,
+        }));
+      }
+    })
+    .catch(() => {});
+}, []);
 
   useEffect(() => {
     if (bannerMessages.length <= 1) return;
@@ -62,7 +74,10 @@ const Navbar = () => {
         <div className="bg-accent text-white text-center text-xs py-2 font-medium tracking-wide uppercase overflow-hidden">
           <span
             key={currentMsg}
-            className="inline-block animate-banner"
+            className="inline-block"
+            style={{
+              animation: 'bannerSlide 3.5s ease-in-out forwards',
+            }}
           >
             {bannerMessages[currentMsg]}
           </span>
