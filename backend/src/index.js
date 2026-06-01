@@ -78,6 +78,9 @@ app.use('/api/stats', statsRoutes);
 const uploadRoutes = require('./routes/uploadRoutes');
 app.use('/api/upload', uploadRoutes);
 
+const settingsRoutes = require('./routes/settingsRoutes');
+app.use('/api/settings', settingsRoutes);
+
 // ─── Conexión a MongoDB Atlas ──────────────────────────────────────────────
 mongoose
   .connect(process.env.MONGODB_URI)

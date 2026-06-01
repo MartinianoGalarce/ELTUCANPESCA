@@ -1,8 +1,11 @@
 // ─── Dependencias ──────────────────────────────────────────────────────────
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import axios from 'axios';
+
+const API = import.meta.env.VITE_API_URL;
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -10,6 +13,33 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // ─── Banner ─────────────────────────────────────────────────────────────
+  const [bannerMessages, setBannerMessages] = useState([]);
+  const [bannerActive, setBannerActive] = useState(true);
+  const [currentMsg, setCurrentMsg] = useState(0);
+  const intervalRef = useRef(null);
+
+  useEffect(() => {
+    axios.get(`${API}/api/settings/banner`)
+      .then(res => {
+        if (res.data.messages?.length > 0) {
+          setBannerMessages(res.data.messages);
+          setBannerActive(res.data.active);
+        }
+      })
+      .catch(() => {
+        // NOTE: si falla silenciosamente, no mostramos nada
+      });
+  }, []);
+
+  useEffect(() => {
+    if (bannerMessages.length <= 1) return;
+    intervalRef.current = setInterval(() => {
+      setCurrentMsg(prev => (prev + 1) % bannerMessages.length);
+    }, 3500);
+    return () => clearInterval(intervalRef.current);
+  }, [bannerMessages]);
 
   const handleLogout = () => {
     logout();
@@ -28,9 +58,16 @@ const Navbar = () => {
   return (
     <header>
       {/* ─── Barra promocional ──────────────────────────────────────── */}
-      <div className="bg-accent text-white text-center text-xs py-2 font-medium tracking-wide uppercase">
-        10% OFF pagando vía transferencia bancaria · Envíos a todo el país
-      </div>
+      {bannerActive && bannerMessages.length > 0 && (
+        <div className="bg-accent text-white text-center text-xs py-2 font-medium tracking-wide uppercase overflow-hidden">
+          <span
+            key={currentMsg}
+            className="inline-block animate-banner"
+          >
+            {bannerMessages[currentMsg]}
+          </span>
+        </div>
+      )}
 
       {/* ─── Navbar principal ───────────────────────────────────────── */}
       <nav className="bg-white border-b border-gray-200 px-6 py-4">
@@ -46,24 +83,13 @@ const Navbar = () => {
             
           {/* ─── Links principales ──────────────────────────────────── */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-            <Link to="/" className="hover:text-dark transition-colors">
-              Home
-            </Link>
-            <Link
-              to="/productos"
-              className="hover:text-dark transition-colors"
-            >
-              Catálogo
-            </Link>
+            <Link to="/" className="hover:text-dark transition-colors">Home</Link>
+            <Link to="/productos" className="hover:text-dark transition-colors">Catálogo</Link>
             {user && (
-              <Link to="/mis-pedidos" className="hover:text-dark transition-colors">
-                Mis Pedidos
-              </Link>
+              <Link to="/mis-pedidos" className="hover:text-dark transition-colors">Mis Pedidos</Link>
             )}
             {user?.role === 'admin' && (
-              <Link to="/admin" className="hover:text-dark transition-colors">
-                Admin
-              </Link>
+              <Link to="/admin" className="hover:text-dark transition-colors">Admin</Link>
             )}
           </div>
 
@@ -84,9 +110,7 @@ const Navbar = () => {
                   type="button"
                   onClick={() => setSearchOpen(false)}
                   className="text-gray-400 hover:text-dark text-lg"
-                >
-                  ✕
-                </button>
+                >✕</button>
               </form>
             ) : (
               <button
@@ -123,14 +147,12 @@ const Navbar = () => {
                 <button
                   onClick={handleLogout}
                   className="text-xs text-gray-400 hover:text-red-500 transition-colors"
-                >
-                  Salir
-                </button>
+                >Salir</button>
               </div>
             ) : (
               <Link to="/login" className="text-gray-500 hover:text-dark transition-colors" aria-label="Ingresar">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 518 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </Link>
             )}

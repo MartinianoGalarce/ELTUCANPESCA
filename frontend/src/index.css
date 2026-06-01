@@ -9,3 +9,15 @@
   --color-accent-dark: #C46E08;
   --color-dark: #1A1A1A;
 }
+
+/* ─── Banner promocional ─────────────────────────────────────────────────── */
+@keyframes bannerSlide {
+  0%   { opacity: 0; transform: translateY(8px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-8px); }
+}
+
+.animate-banner {
+  animation: bannerSlide 3.5s ease-in-out forwards;
+}
