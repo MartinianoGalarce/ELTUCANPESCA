@@ -10,6 +10,8 @@ const AdminCategories = () => {
   const [editing, setEditing] = useState(null);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', description: '' });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
 
   const fetchCategories = async () => {
     try {
@@ -27,12 +29,16 @@ const AdminCategories = () => {
   const handleEdit = (cat) => {
     setEditing(cat);
     setForm({ name: cat.name, description: cat.description });
+    setImageFile(null);
+    setImagePreview(cat.image || '');
     setShowForm(true);
   };
 
   const handleNew = () => {
     setEditing(null);
     setForm({ name: '', description: '' });
+    setImageFile(null);
+    setImagePreview('');
     setShowForm(true);
   };
 
@@ -40,10 +46,19 @@ const AdminCategories = () => {
     e.preventDefault();
     setError('');
     try {
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('description', form.description);
+      if (imageFile) formData.append('image', imageFile);
+
       if (editing) {
-        await api.patch(`/categories/${editing._id}`, form);
+        await api.patch(`/categories/${editing._id}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
       } else {
-        await api.post('/categories', form);
+        await api.post('/categories', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
       }
       setShowForm(false);
       fetchCategories();
@@ -114,6 +129,27 @@ const AdminCategories = () => {
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-primary"
                 placeholder="Descripcion opcional"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-dark mb-1">Imagen</label>
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="preview"
+                  className="w-24 h-24 object-cover rounded-xl mb-2 border border-gray-200"
+                />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  setImageFile(file);
+                  setImagePreview(URL.createObjectURL(file));
+                }}
+                className="text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
               />
             </div>
             <div className="flex gap-3">

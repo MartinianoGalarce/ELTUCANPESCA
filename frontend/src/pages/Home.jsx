@@ -27,7 +27,6 @@ const Home = () => {
     fetchData();
   }, []);
 
-  const transferPrice = (price) => Math.round(price * 0.9);
 
   return (
     <Layout>
@@ -132,15 +131,30 @@ const Home = () => {
               <Link
                 key={cat._id}
                 to={`/productos?category=${cat._id}`}
-                className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:border-primary hover:shadow-md transition-all group"
+                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-primary hover:shadow-md transition-all group"
               >
-                <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h2z" />
-                  </svg>
+                {/* Imagen o placeholder */}
+                <div className="h-32 bg-gray-100 relative overflow-hidden">
+                  {cat.image ? (
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="h-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5l2 2h4a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h2z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="text-sm font-semibold text-dark group-hover:text-primary transition-colors">
-                  {cat.name}
+                <div className="p-3 text-center">
+                  <div className="text-sm font-semibold text-dark group-hover:text-primary transition-colors">
+                    {cat.name}
+                  </div>
                 </div>
               </Link>
             ))}

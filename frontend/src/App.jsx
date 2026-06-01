@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/OrderConfirmed';
+import NotFound from './pages/NotFound';
 
 // Páginas de usuario
 import MyOrders from './pages/MyOrders';
@@ -35,6 +36,8 @@ function App() {
       <Route path="/carrito" element={<Cart />} />
       <Route path="/login" element={<Login />} />
       <Route path="/registro" element={<Register />} />
+      {/* ── 404 ───────────────────────────────────────────────────────── */}
+      <Route path="*" element={<NotFound />} />
 
       {/* ── Privadas (usuario logueado) ─────────────────────────────────── */}
       <Route path="/checkout" element={
