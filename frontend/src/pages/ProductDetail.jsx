@@ -66,7 +66,6 @@ const ProductDetail = () => {
   if (!product) return null;
 
   const images = product.images || [];
-  const transferPrice = Math.round(product.price * 0.9);
 
   return (
     <Layout>
@@ -139,15 +138,8 @@ const ProductDetail = () => {
 
           {/* Precio */}
           <div className="mb-4">
-            <div className="text-3xl font-bold text-accent mb-1">
+            <div className="text-3xl font-bold text-accent mb-2">
               ${product.price.toLocaleString('es-AR')}
-            </div>
-            <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 w-fit">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-              <span className="text-sm font-semibold text-dark">${transferPrice.toLocaleString('es-AR')}</span>
-              <span className="text-xs text-gray-500">(10% OFF pagando con Transferencia)</span>
             </div>
           </div>
 
@@ -166,6 +158,17 @@ const ProductDetail = () => {
               </>
             )}
           </div>
+          
+          {/* Consultar por WhatsApp */}
+
+        <a  href={`https://wa.me/5492281541007?text=${encodeURIComponent(`Hola! Quería consultar sobre el producto: ${product.name}`)}`}
+          target="_blank"
+          rel="noreferrer"
+          className="text-xs text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-1 mb-6"
+        >
+          💬 Consultar por <span className="text-green-600 font-medium">WhatsApp</span> antes de comprar
+        </a>
+          
 
           {product.stock > 0 && (
             <>
