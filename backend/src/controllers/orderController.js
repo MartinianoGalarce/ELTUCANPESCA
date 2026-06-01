@@ -168,6 +168,19 @@ const updateOrderStatus = async (req, res) => {
 
     order.status = status;
     if (trackingNumber) order.trackingNumber = trackingNumber;
+    // NOTE: notificar al cliente por email cuando cambia el estado
+    try {
+      const { sendOrderStatusEmail } = require('../utils/emails');
+      const populatedOrder = await Order.findById(order._id).populate('user', 'name email');
+      await sendOrderStatusEmail(
+        populatedOrder.user.email,
+        populatedOrder.user.name,
+        order._id.toString(),
+        status
+      );
+    } catch (emailErr) {
+      console.error('Error enviando email de estado:', emailErr.message);
+    }
     await order.save();
 
     res.json(order);

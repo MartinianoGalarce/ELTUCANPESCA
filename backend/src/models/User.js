@@ -41,6 +41,32 @@ const userSchema = new mongoose.Schema(
       zip:      { type: String, default: '' },
       phone:    { type: String, default: '' },
     },
+
+    // NOTE: verificación de email
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationToken: {
+      type: String,
+      default: '',
+      select: false,
+    },
+    emailVerificationExpires: {
+      type: Date,
+      select: false,
+    },
+
+    // NOTE: recuperación de contraseña
+    passwordResetToken: {
+      type: String,
+      default: '',
+      select: false,
+    },
+    passwordResetExpires: {
+      type: Date,
+      select: false,
+    },
   },
   {
     // NOTE: agrega createdAt y updatedAt automáticamente

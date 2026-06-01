@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import Checkout from './pages/Checkout';
 import OrderConfirmed from './pages/OrderConfirmed';
 import NotFound from './pages/NotFound';
+import VerifyEmail from './pages/VerifyEmail';
 
 // Páginas de usuario
 import MyOrders from './pages/MyOrders';
@@ -38,6 +39,7 @@ function App() {
       <Route path="/registro" element={<Register />} />
       {/* ── 404 ───────────────────────────────────────────────────────── */}
       <Route path="*" element={<NotFound />} />
+      <Route path="/verificar-email" element={<VerifyEmail />} />
 
       {/* ── Privadas (usuario logueado) ─────────────────────────────────── */}
       <Route path="/checkout" element={
