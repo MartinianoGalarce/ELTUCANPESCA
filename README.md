@@ -162,7 +162,7 @@ El frontend corre en `http://localhost:5173` y el backend en `http://localhost:5
 
 ## 📬 Contacto
 
-Instagram: [@eltucanpesca](https://instagram.com/_eltucanpesca)
+Instagram: [@_eltucanpesca](https://instagram.com/_eltucanpesca)
 
 ---
 
