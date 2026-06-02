@@ -2,7 +2,7 @@
 
 > E-commerce completo para un local de pesca y camping — desarrollado con React, Node.js y MongoDB.
 
-![Home](./screenshots/home.png)
+![Home](./screenshots/home2ng)
 
 ---
 
@@ -97,13 +97,13 @@ ELTUCANPESCA/
 ## 📸 Capturas
 
 ### Home
-![Home](./screenshots/home.png)
+![Home](./screenshots/home2png)
 
 ### Catálogo con filtros
-![Catalogo](./screenshots/catalogo.png)
+![Catalogo](./screenshots/catalogo2png)
 
 ### Panel de administración — Dashboard
-![Dashboard](./screenshots/dashboard.png)
+![Dashboard](./screenshots/dashboard2png)
 
 ### Panel de administración — Productos
 ![Productos Admin](./screenshots/admin-productos.png)
