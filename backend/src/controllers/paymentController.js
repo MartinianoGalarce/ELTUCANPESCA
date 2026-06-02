@@ -41,8 +41,7 @@ const createPreference = async (req, res) => {
           failure: `${process.env.CLIENT_URL}/checkout`,
           pending: `${process.env.CLIENT_URL}/orden-confirmada/${order._id}`,
         },
-        // NOTE: auto_return solo funciona con URLs publicas, se activa en produccion
-        // auto_return: 'approved',
+        auto_return: 'approved',
         external_reference: order._id.toString(),
         notification_url: `${process.env.BACKEND_URL}/api/payments/webhook`,
       },
