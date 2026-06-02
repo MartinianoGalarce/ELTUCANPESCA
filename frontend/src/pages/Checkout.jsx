@@ -42,11 +42,21 @@ const Checkout = () => {
           quantity: item.quantity,
         })),
       };
+
       const res = await api.post('/orders', orderData);
-      // NOTE: marcar como confirmado antes de limpiar para evitar redirección al carrito
-      setConfirmed(true);
-      clearCart();
-      navigate(`/orden-confirmada/${res.data._id}`);
+      const order = res.data;
+
+      if (paymentMethod === 'mercadopago') {
+        // NOTE: crear preferencia y redirigir a MP
+        const prefRes = await api.post(`/payments/create-preference/${order._id}`);
+        setConfirmed(true);
+        clearCart();
+        window.location.href = prefRes.data.initPoint;
+      } else {
+        setConfirmed(true);
+        clearCart();
+        navigate(`/orden-confirmada/${order._id}`);
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Error al procesar la orden');
     } finally {
@@ -54,7 +64,6 @@ const Checkout = () => {
     }
   };
 
-  // NOTE: solo redirigir al carrito si no se confirmó todavía
   if (cart.length === 0 && !confirmed) {
     navigate('/carrito');
     return null;
@@ -72,69 +81,39 @@ const Checkout = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2 md:col-span-1">
                 <label className="block text-sm font-medium text-dark mb-1">Calle</label>
-                <input
-                  name="street"
-                  value={address.street}
-                  onChange={handleChange}
-                  required
+                <input name="street" value={address.street} onChange={handleChange} required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                  placeholder="Av. Corrientes"
-                />
+                  placeholder="Av. Corrientes" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-dark mb-1">Número</label>
-                <input
-                  name="number"
-                  value={address.number}
-                  onChange={handleChange}
-                  required
+                <input name="number" value={address.number} onChange={handleChange} required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                  placeholder="1234"
-                />
+                  placeholder="1234" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-dark mb-1">Ciudad</label>
-                <input
-                  name="city"
-                  value={address.city}
-                  onChange={handleChange}
-                  required
+                <input name="city" value={address.city} onChange={handleChange} required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                  placeholder="Buenos Aires"
-                />
+                  placeholder="Buenos Aires" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-dark mb-1">Provincia</label>
-                <input
-                  name="province"
-                  value={address.province}
-                  onChange={handleChange}
-                  required
+                <input name="province" value={address.province} onChange={handleChange} required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                  placeholder="CABA"
-                />
+                  placeholder="CABA" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-dark mb-1">Código postal</label>
-                <input
-                  name="zip"
-                  value={address.zip}
-                  onChange={handleChange}
-                  required
+                <input name="zip" value={address.zip} onChange={handleChange} required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                  placeholder="1043"
-                />
+                  placeholder="1043" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-dark mb-1">Teléfono</label>
-                <input
-                  name="phone"
-                  value={address.phone}
-                  onChange={handleChange}
-                  required
+                <input name="phone" value={address.phone} onChange={handleChange} required
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                  placeholder="1112345678"
-                />
+                  placeholder="1112345678" />
               </div>
             </div>
           </div>
@@ -143,14 +122,10 @@ const Checkout = () => {
             <h2 className="font-bold text-dark text-lg mb-4">Método de pago</h2>
             <div className="space-y-3">
               <label className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'transfer' ? 'border-primary bg-green-50' : 'border-gray-200'}`}>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="transfer"
+                <input type="radio" name="paymentMethod" value="transfer"
                   checked={paymentMethod === 'transfer'}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="accent-primary"
-                />
+                  className="accent-primary" />
                 <div>
                   <div className="font-medium text-dark">Transferencia bancaria</div>
                   <div className="text-gray-500 text-xs">Realizá la transferencia y envianos el comprobante</div>
@@ -158,16 +133,15 @@ const Checkout = () => {
                 </div>
               </label>
               <label className={`flex items-center gap-4 p-4 border-2 rounded-xl cursor-pointer transition-colors ${paymentMethod === 'mercadopago' ? 'border-primary bg-green-50' : 'border-gray-200'}`}>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="mercadopago"
+                <input type="radio" name="paymentMethod" value="mercadopago"
                   checked={paymentMethod === 'mercadopago'}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="accent-primary"
-                />
+                  className="accent-primary" />
                 <div>
-                  <div className="font-medium text-dark">Mercado Pago</div>
+                  <div className="font-medium text-dark flex items-center gap-2">
+                    Mercado Pago
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-normal">Recomendado</span>
+                  </div>
                   <div className="text-gray-500 text-xs">Tarjeta, cuotas o MP wallet</div>
                   <div className="text-gray-500 text-xs">Total: ${total.toLocaleString('es-AR')}</div>
                 </div>
@@ -186,7 +160,7 @@ const Checkout = () => {
             disabled={loading}
             className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-60 text-lg"
           >
-            {loading ? 'Procesando...' : 'Confirmar pedido'}
+            {loading ? 'Procesando...' : paymentMethod === 'mercadopago' ? 'Pagar con Mercado Pago' : 'Confirmar pedido'}
           </button>
         </form>
 
