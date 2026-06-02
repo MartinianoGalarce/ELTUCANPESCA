@@ -81,11 +81,17 @@ app.use('/api/upload', uploadRoutes);
 const settingsRoutes = require('./routes/settingsRoutes');
 app.use('/api/settings', settingsRoutes);
 
+const paymentRoutes = require('./routes/paymentRoutes');
+app.use('/api/payments', paymentRoutes);
+
+const { initCronJobs } = require('./utils/cronJobs');
+
 // ─── Conexión a MongoDB Atlas ──────────────────────────────────────────────
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB conectado');
+    initCronJobs();
     app.listen(process.env.PORT, () => {
       console.log(`Servidor corriendo en puerto ${process.env.PORT}`);
     });
