@@ -51,7 +51,10 @@ const AdminOrders = () => {
 
   useEffect(() => { fetchOrders(); }, [statusFilter]);
 
+  const [statusLoading, setStatusLoading] = useState(null);
+
   const handleStatusChange = async (orderId, newStatus) => {
+    setStatusLoading(`${orderId}-${newStatus}`);
     try {
       const res = await api.patch(`/orders/${orderId}/status`, { status: newStatus });
       setOrders((prev) =>
@@ -59,6 +62,8 @@ const AdminOrders = () => {
       );
     } catch (error) {
       console.error('Error actualizando estado:', error);
+    } finally {
+      setStatusLoading(null);
     }
   };
 
@@ -195,9 +200,10 @@ const AdminOrders = () => {
                             <button
                               key={t}
                               onClick={() => handleStatusChange(order._id, t)}
-                              className="text-xs px-3 py-1.5 bg-white border border-gray-300 hover:border-primary hover:text-primary rounded-lg transition-colors"
+                              disabled={statusLoading === `${order._id}-${t}`}
+                              className="text-xs px-3 py-1.5 bg-white border border-gray-300 hover:border-primary hover:text-primary rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              → {STATUS_MAP[t]?.label}
+                              {statusLoading === `${order._id}-${t}` ? 'Procesando...' : `→ ${STATUS_MAP[t]?.label}`}
                             </button>
                           ))}
                         </div>
