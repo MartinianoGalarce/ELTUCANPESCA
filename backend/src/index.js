@@ -72,6 +72,11 @@ const authLimiter = rateLimit({
   message: { error: 'Demasiados intentos de login, intentá de nuevo en 15 minutos.' },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => {
+    return req.headers['cf-connecting-ip'] || 
+           req.headers['x-forwarded-for']?.split(',')[0] || 
+           req.ip;
+  },
 });
 app.use('/api/auth/login', authLimiter);
 
