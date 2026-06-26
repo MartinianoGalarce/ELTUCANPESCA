@@ -50,7 +50,7 @@ const createPreference = async (req, res) => {
     res.json({ preferenceId: result.id, initPoint: result.init_point });
   } catch (error) {
     console.error('Error MP:', error);
-    res.status(500).json({ error: 'Error al crear preferencia', detail: error.message });
+    res.status(500).json({ error: 'Error al crear preferencia' });
   }
 };
 

@@ -49,7 +49,7 @@ const getProducts = async (req, res) => {
       pages: Math.ceil(total / Number(limit)),
     });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener productos', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener productos' });
   }
 };
 
@@ -68,7 +68,7 @@ const getProductBySlug = async (req, res) => {
 
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener producto', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener producto' });
   }
 };
 
@@ -87,7 +87,7 @@ const getProductById = async (req, res) => {
 
     res.json(product);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener producto', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener producto' });
   }
 };
 
@@ -111,7 +111,7 @@ const createProduct = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({ error: 'Ya existe un producto con ese nombre' });
     }
-    res.status(500).json({ error: 'Error al crear producto', detail: error.message });
+    res.status(500).json({ error: 'Error al crear producto' });
   }
 };
 
@@ -136,7 +136,7 @@ const updateProduct = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({ error: 'Ya existe un producto con ese nombre' });
     }
-    res.status(500).json({ error: 'Error al actualizar producto', detail: error.message });
+    res.status(500).json({ error: 'Error al actualizar producto' });
   }
 };
 
@@ -152,7 +152,7 @@ const deleteProduct = async (req, res) => {
 
     res.json({ message: 'Producto eliminado correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar producto', detail: error.message });
+    res.status(500).json({ error: 'Error al eliminar producto' });
   }
 };
 

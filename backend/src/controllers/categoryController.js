@@ -23,7 +23,7 @@ const getCategories = async (req, res) => {
     const categories = await Category.find(filter).sort({ name: 1 });
     res.json(categories);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener categorías', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener categorías' });
   }
 };
 
@@ -37,7 +37,7 @@ const getCategoryBySlug = async (req, res) => {
     }
     res.json(category);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener categoría', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener categoría' });
   }
 };
 
@@ -56,7 +56,7 @@ const createCategory = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({ error: 'Ya existe una categoría con ese nombre' });
     }
-    res.status(500).json({ error: 'Error al crear categoría', detail: error.message });
+    res.status(500).json({ error: 'Error al crear categoría' });
   }
 };
 
@@ -85,7 +85,7 @@ const updateCategory = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({ error: 'Ya existe una categoría con ese nombre' });
     }
-    res.status(500).json({ error: 'Error al actualizar categoría', detail: error.message });
+    res.status(500).json({ error: 'Error al actualizar categoría' });
   }
 };
 
@@ -99,7 +99,7 @@ const deleteCategory = async (req, res) => {
     }
     res.json({ message: 'Categoría eliminada correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar categoría', detail: error.message });
+    res.status(500).json({ error: 'Error al eliminar categoría' });
   }
 };
 

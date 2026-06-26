@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const helmet = require('helmet');
-const mongoSanitize = require('mongo-sanitize');
 const rateLimit = require('express-rate-limit');
 
 // ─── Configuración de variables de entorno ─────────────────────────────────
@@ -29,11 +28,20 @@ app.use(cors({
 // NOTE: parsear JSON en el body de los requests
 app.use(express.json());
 
-// NOTE: sanitiza el body, query y params para prevenir inyección NoSQL
+// ─── Sanitización NoSQL manual ─────────────────────────────────────────────
 app.use((req, res, next) => {
-  req.body = mongoSanitize(req.body);
-  req.query = mongoSanitize(req.query);
-  req.params = mongoSanitize(req.params);
+  const sanitize = (obj) => {
+    if (obj && typeof obj === 'object') {
+      Object.keys(obj).forEach(key => {
+        if (key.startsWith('$')) {
+          delete obj[key];
+        } else {
+          sanitize(obj[key]);
+        }
+      });
+    }
+  };
+  if (req.body) sanitize(req.body);
   next();
 });
 

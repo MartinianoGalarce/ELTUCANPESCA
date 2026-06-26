@@ -32,7 +32,7 @@ const getSalesSummary = async (req, res) => {
       result[0] || { totalRevenue: 0, totalOrders: 0, avgTicket: 0 }
     );
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener resumen', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener resumen' });
   }
 };
 
@@ -63,7 +63,7 @@ const getSalesByDay = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener ventas por día', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener ventas por día' });
   }
 };
 
@@ -93,7 +93,7 @@ const getSalesByMethod = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener ventas por método', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener ventas por método' });
   }
 };
 
@@ -120,7 +120,7 @@ const getTopSellingProducts = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener productos más vendidos', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener productos más vendidos' });
   }
 };
 
@@ -138,7 +138,7 @@ const getLowStockProducts = async (req, res) => {
 
     res.json(products);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener productos con stock bajo', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener productos con stock bajo' });
   }
 };
 
@@ -161,7 +161,7 @@ const getInventoryValue = async (req, res) => {
 
     res.json(result[0] || { totalValue: 0, totalProducts: 0, totalStock: 0 });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener valor del inventario', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener valor del inventario' });
   }
 };
 
@@ -181,7 +181,7 @@ const getOrdersByStatus = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener órdenes por estado', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener órdenes por estado' });
   }
 };
 
@@ -198,7 +198,7 @@ const getRecentOrders = async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener órdenes recientes', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener órdenes recientes' });
   }
 };
 
@@ -240,7 +240,7 @@ const getTopCustomers = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener top clientes', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener top clientes' });
   }
 };
 
@@ -270,7 +270,7 @@ const getNewCustomers = async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener nuevos clientes', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener nuevos clientes' });
   }
 };
 

@@ -56,7 +56,7 @@ const register = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: 'Error al registrar usuario', detail: error.message });
+    res.status(500).json({ error: 'Error al registrar usuario' });
   }
 };
 
@@ -82,7 +82,7 @@ const verifyEmail = async (req, res) => {
 
     res.json({ message: 'Email verificado correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al verificar email', detail: error.message });
+    res.status(500).json({ error: 'Error al verificar email' });
   }
 };
 
@@ -115,7 +115,7 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ error: 'Error al iniciar sesión', detail: error.message });
+    res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 };
 
@@ -132,7 +132,7 @@ const getMe = async (req, res) => {
       isEmailVerified: req.user.isEmailVerified,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener perfil', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener perfil' });
   }
 };
 
@@ -157,7 +157,7 @@ const updateMe = async (req, res) => {
       isEmailVerified: updated.isEmailVerified,
     });
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar perfil', detail: error.message });
+    res.status(500).json({ error: 'Error al actualizar perfil' });
   }
 };
 
@@ -186,7 +186,7 @@ const forgotPassword = async (req, res) => {
 
     res.json({ message: 'Si el email existe recibirás un link para resetear tu contraseña' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al procesar la solicitud', detail: error.message });
+    res.status(500).json({ error: 'Error al procesar la solicitud' });
   }
 };
 
@@ -212,7 +212,7 @@ const resetPassword = async (req, res) => {
 
     res.json({ message: 'Contraseña actualizada correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al resetear contraseña', detail: error.message });
+    res.status(500).json({ error: 'Error al resetear contraseña' });
   }
 };
 
@@ -242,7 +242,7 @@ const changePassword = async (req, res) => {
 
     res.json({ message: 'Contraseña actualizada correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al cambiar contraseña', detail: error.message });
+    res.status(500).json({ error: 'Error al cambiar contraseña' });
   }
 };
 

@@ -66,7 +66,7 @@ const createOrder = async (req, res) => {
     res.status(201).json(order[0]);
   } catch (error) {
     await session.abortTransaction();
-    res.status(500).json({ error: 'Error al crear la orden', detail: error.message });
+    res.status(500).json({ error: 'Error al crear la orden' });
   } finally {
     // NOTE: siempre cerrar la sesión al terminar
     session.endSession();
@@ -80,7 +80,7 @@ const getMyOrders = async (req, res) => {
     const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener órdenes', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener órdenes' });
   }
 };
 
@@ -101,7 +101,7 @@ const getOrderById = async (req, res) => {
 
     res.json(order);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener la orden', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener la orden' });
   }
 };
 
@@ -124,7 +124,7 @@ const getAllOrders = async (req, res) => {
 
     res.json({ orders, total, page: Number(page), pages: Math.ceil(total / Number(limit)) });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener órdenes', detail: error.message });
+    res.status(500).json({ error: 'Error al obtener órdenes' });
   }
 };
 
@@ -185,7 +185,7 @@ const updateOrderStatus = async (req, res) => {
 
     res.json(order);
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar estado', detail: error.message });
+    res.status(500).json({ error: 'Error al actualizar estado' });
   }
 };
 
@@ -231,7 +231,7 @@ const uploadReceipt = async (req, res) => {
 
     res.json({ message: 'Comprobante subido correctamente', url: result.secure_url });
   } catch (error) {
-    res.status(500).json({ error: 'Error al subir el comprobante', detail: error.message });
+    res.status(500).json({ error: 'Error al subir el comprobante' });
   }
 };
 
