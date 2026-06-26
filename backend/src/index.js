@@ -21,7 +21,18 @@ app.use(helmet());
 
 // NOTE: solo el frontend puede hacer requests al backend en producción
 app.use(cors({
-  origin: process.env.CLIENT_URL,
+  origin: function(origin, callback) {
+    const allowed = [
+      process.env.CLIENT_URL,
+      'http://localhost:5173',
+    ].filter(Boolean);
+    
+    if (!origin || allowed.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS bloqueado: origen no permitido'));
+    }
+  },
   credentials: true,
 }));
 
@@ -57,8 +68,10 @@ app.use('/api', generalLimiter);
 // NOTE: límite estricto para login — 10 intentos por IP cada 15 minutos
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: process.env.NODE_ENV === 'development' ? 100 : 50,
+  max: process.env.NODE_ENV === 'production' ? 10 : 100,
   message: { error: 'Demasiados intentos de login, intentá de nuevo en 15 minutos.' },
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use('/api/auth/login', authLimiter);
 
